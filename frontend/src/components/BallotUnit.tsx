@@ -8,15 +8,19 @@ import './BallotUnit.css';
 interface BallotUnitProps {
     candidates: Candidate[];
     wardNumber: number;
+    wardLabel?: string;
     onVoteCast: (candidateId: string) => void;
     disabled?: boolean;
+    parties?: Record<string, Party>;
 }
 
 export const BallotUnit: React.FC<BallotUnitProps> = ({
     candidates,
     wardNumber,
+    wardLabel = 'Ward',
     onVoteCast,
-    disabled = false
+    disabled = false,
+    parties = PARTIES
 }) => {
     const [selectedCandidate, setSelectedCandidate] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -50,13 +54,14 @@ export const BallotUnit: React.FC<BallotUnitProps> = ({
 
             {/* Ward Title */}
             <div className="ward-title">
-                <span className="ward-label">WARD {wardNumber}</span>
+                <span className="ward-label">{wardLabel.toUpperCase()} {wardNumber}</span>
             </div>
 
             {/* Candidate List */}
             <div className="candidate-list">
                 {candidates.map((candidate) => {
-                    const party = parties[candidate.partyCode];
+                    // Force type assertion since we know the structure matches
+                    const party = (parties as Record<string, Party>)[candidate.partyCode];
                     const isSelected = selectedCandidate === candidate.id;
 
                     return (
