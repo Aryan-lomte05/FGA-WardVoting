@@ -69,12 +69,13 @@ function VotingApp() {
 
     playConfirmationBeep();
 
-    const updatedSession = recordVote(session, currentWard, candidateId);
+    const totalWards = electionConfig?.wards || 4;
+    const updatedSession = recordVote(session, currentWard, candidateId, totalWards);
     setSession(updatedSession);
 
     await new Promise(resolve => setTimeout(resolve, 800));
 
-    if (currentWard < (electionConfig?.wards || 4)) {
+    if (currentWard < totalWards) {
       setCurrentWard(currentWard + 1);
     } else {
       setAppState('completed');

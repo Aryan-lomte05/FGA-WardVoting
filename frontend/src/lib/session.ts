@@ -86,18 +86,18 @@ export const saveSession = (session: VotingSession): void => {
 };
 
 // Record a vote for a ward
-export const recordVote = (session: VotingSession, wardNumber: number, candidateId: string): VotingSession => {
+export const recordVote = (session: VotingSession, wardNumber: number, candidateId: string, totalWards: number): VotingSession => {
     const updated: VotingSession = {
         ...session,
         votes: {
             ...session.votes,
             [wardNumber]: candidateId
         },
-        currentWard: wardNumber < 4 ? wardNumber + 1 : wardNumber
+        currentWard: wardNumber < totalWards ? wardNumber + 1 : wardNumber
     };
 
     // Check if all wards are complete
-    if (Object.keys(updated.votes).length === 4) {
+    if (Object.keys(updated.votes).length === totalWards) {
         updated.hasVoted = true;
         updated.completedAt = Date.now();
 
