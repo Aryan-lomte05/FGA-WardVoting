@@ -15,11 +15,11 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onBeginVoting }) =
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                {/* ECI Logo */}
+                {/* Aryan's EVM Logo */}
                 <div className="eci-logo">
-                    <div className="emblem">🇮🇳</div>
-                    <h1 className="eci-title">Election Commission of India</h1>
-                    <div className="eci-subtitle">Electronic Voting System</div>
+                    <div className="emblem">⚡</div>
+                    <h1 className="eci-title">Aryan's EVM</h1>
+                    <div className="eci-subtitle">Premium Voting System</div>
                 </div>
 
                 {/* Instructions */}

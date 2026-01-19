@@ -1,8 +1,9 @@
-// Session Management for Vote Integrity
-// Prevents duplicate voting and handles device fingerprinting
+// Session Management for Vote Integrity with Voter Tracking
+// Prevents duplicate voting and tracks voter numbers
 
 export interface VotingSession {
     sessionId: string;
+    voterNumber: number; // Sequential voter number (1, 2, 3...)
     hasVoted: boolean;
     currentWard: number;
     votes: Record<number, string>; // wardNumber -> candidateId
@@ -36,6 +37,21 @@ export const getDeviceFingerprint = (): string => {
     return `fp_${Math.abs(hash).toString(36)}`;
 };
 
+// Get next voter number by counting completed sessions
+const getNextVoterNumber = (): number => {
+    let count = 0;
+
+    // Count all completed voting sessions in localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('voting_session_')) {
+            count++;
+        }
+    }
+
+    return count + 1;
+};
+
 // Initialize or retrieve session
 export const initializeSession = (): VotingSession => {
     const stored = localStorage.getItem('voting_session');
@@ -48,8 +64,11 @@ export const initializeSession = (): VotingSession => {
         }
     }
 
+    const voterNumber = getNextVoterNumber();
+
     const newSession: VotingSession = {
         sessionId: generateSessionId(),
+        voterNumber: voterNumber,
         hasVoted: false,
         currentWard: 1,
         votes: {},
@@ -81,6 +100,9 @@ export const recordVote = (session: VotingSession, wardNumber: number, candidate
     if (Object.keys(updated.votes).length === 4) {
         updated.hasVoted = true;
         updated.completedAt = Date.now();
+
+        // Save completed session with voter number for tracking
+        localStorage.setItem(`voting_session_${updated.voterNumber}`, JSON.stringify(updated));
     }
 
     saveSession(updated);
@@ -95,4 +117,40 @@ export const clearSession = (): void => {
 // Check if session has already voted
 export const hasAlreadyVoted = (session: VotingSession): boolean => {
     return session.hasVoted;
+};
+
+// Get all completed sessions for admin view
+export const getAllVoterSessions = (): VotingSession[] => {
+    const sessions: VotingSession[] = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('voting_session_')) {
+            try {
+                const session = JSON.parse(localStorage.getItem(key) || '{}');
+                if (session.hasVoted) {
+                    sessions.push(session);
+                }
+            } catch {
+                // Skip invalid sessions
+            }
+        }
+    }
+
+    // Sort by voter number
+    return sessions.sort((a, b) => a.voterNumber - b.voterNumber);
+};
+
+// Clear all votes (New Election feature)
+export const clearAllVotes = (): void => {
+    const keysToRemove: string[] = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('voting_session')) {
+            keysToRemove.push(key);
+        }
+    }
+
+    keysToRemove.forEach(key => localStorage.removeItem(key));
 };

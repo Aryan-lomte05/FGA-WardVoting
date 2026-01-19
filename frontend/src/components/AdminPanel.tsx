@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { PARTIES } from '../data/candidates';
+import { getAllVoterSessions, clearAllVotes } from '../lib/session';
+import type { VotingSession } from '../lib/session';
 import './AdminPanel.css';
 
 const ADMIN_PASSCODE = '12345';
@@ -19,11 +22,16 @@ interface WardResults {
     winner: VoteCount | null;
 }
 
+type TabType = 'results' | 'logs';
+
 export const AdminPanel: React.FC = () => {
+    const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [passcode, setPasscode] = useState('');
     const [error, setError] = useState('');
+    const [activeTab, setActiveTab] = useState<TabType>('results');
     const [results, setResults] = useState<WardResults[]>([]);
+    const [voterSessions, setVoterSessions] = useState<VotingSession[]>([]);
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,48 +39,28 @@ export const AdminPanel: React.FC = () => {
         if (passcode === ADMIN_PASSCODE) {
             setIsAuthenticated(true);
             setError('');
-            loadResults();
+            loadData();
         } else {
             setError('Invalid passcode');
             setPasscode('');
         }
     };
 
-    const loadResults = () => {
-        // Load all votes from localStorage
+    const loadData = () => {
+        // Load voter sessions
+        const sessions = getAllVoterSessions();
+        setVoterSessions(sessions);
+
+        // Calculate vote counts
         const allVotes: Record<string, number> = {};
 
-        // Scan localStorage for all voting sessions
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith('voting_session')) {
-                try {
-                    const session = JSON.parse(localStorage.getItem(key) || '{}');
-                    if (session.votes) {
-                        Object.values(session.votes).forEach((candidateId: any) => {
-                            allVotes[candidateId] = (allVotes[candidateId] || 0) + 1;
-                        });
-                    }
-                } catch {
-                    // Skip invalid sessions
-                }
+        sessions.forEach(session => {
+            if (session.votes) {
+                Object.values(session.votes).forEach((candidateId: any) => {
+                    allVotes[candidateId] = (allVotes[candidateId] || 0) + 1;
+                });
             }
-        }
-
-        // Also check the main session
-        try {
-            const mainSession = localStorage.getItem('voting_session');
-            if (mainSession) {
-                const session = JSON.parse(mainSession);
-                if (session.votes) {
-                    Object.values(session.votes).forEach((candidateId: any) => {
-                        allVotes[candidateId] = (allVotes[candidateId] || 0) + 1;
-                    });
-                }
-            }
-        } catch {
-            // Skip
-        }
+        });
 
         // Calculate results per ward
         const wardResults: WardResults[] = [];
@@ -94,10 +82,7 @@ export const AdminPanel: React.FC = () => {
                 });
             });
 
-            // Sort by votes (descending)
             candidates.sort((a, b) => b.votes - a.votes);
-
-            // Determine winner
             const winner = candidates[0].votes > 0 ? candidates[0] : null;
 
             wardResults.push({
@@ -111,6 +96,29 @@ export const AdminPanel: React.FC = () => {
         setResults(wardResults);
     };
 
+    const handleNewElection = () => {
+        if (confirm('⚠️ This will delete ALL votes and start a new election. Are you sure?')) {
+            clearAllVotes();
+            loadData();
+            alert('✅ All votes cleared! New election started.');
+        }
+    };
+
+    const formatTime = (timestamp: number) => {
+        return new Date(timestamp).toLocaleTimeString('en-IN', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+    };
+
+    const getCandidateName = (candidateId: string) => {
+        const [ward, party] = candidateId.split('_');
+        const wardNum = ward.replace('W', '');
+        const partyIndex = Object.keys(PARTIES).indexOf(party);
+        return `Candidate ${String.fromCharCode(65 + partyIndex)}${wardNum}`;
+    };
+
     if (!isAuthenticated) {
         return (
             <div className="admin-login">
@@ -122,7 +130,7 @@ export const AdminPanel: React.FC = () => {
                     <div className="login-header">
                         <div className="admin-icon">🔐</div>
                         <h1 className="login-title">Admin Access</h1>
-                        <p className="login-subtitle">Vote Counting System</p>
+                        <p className="login-subtitle">Aryan's EVM Control Panel</p>
                     </div>
 
                     <form onSubmit={handleLogin} className="login-form">
@@ -150,12 +158,12 @@ export const AdminPanel: React.FC = () => {
                         )}
 
                         <button type="submit" className="login-button">
-                            Access Results
+                            Access Control Panel
                         </button>
                     </form>
 
                     <div className="login-footer">
-                        <span className="eci-badge-small">🇮🇳 Election Commission of India</span>
+                        <span className="evm-badge-small">⚡ Aryan's EVM</span>
                     </div>
                 </motion.div>
             </div>
@@ -164,108 +172,213 @@ export const AdminPanel: React.FC = () => {
 
     return (
         <div className="admin-panel">
+            {/* Header */}
             <div className="admin-header">
                 <div className="header-content">
                     <div className="header-title">
-                        <span className="header-icon">📊</span>
+                        <span className="header-icon">⚡</span>
                         <div>
-                            <h1>Vote Counting System</h1>
-                            <p>Election Results Dashboard</p>
+                            <h1>Aryan's EVM Control Panel</h1>
+                            <p>Election Management Dashboard</p>
                         </div>
                     </div>
-                    <button onClick={() => setIsAuthenticated(false)} className="logout-button">
-                        Logout
-                    </button>
+                    <div className="header-actions">
+                        <button onClick={handleNewElection} className="new-election-btn">
+                            <span>🔄</span>
+                            <span>New Election</span>
+                        </button>
+                        <button onClick={() => navigate('/')} className="home-btn">
+                            <span>🏠</span>
+                            <span>Home</span>
+                        </button>
+                        <button onClick={() => setIsAuthenticated(false)} className="logout-button">
+                            Logout
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div className="results-container">
-                {results.map((ward) => (
-                    <motion.div
-                        key={ward.wardNumber}
-                        className="ward-results"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: ward.wardNumber * 0.1 }}
-                    >
-                        <div className="ward-header">
-                            <h2>Ward {ward.wardNumber}</h2>
-                            <div className="total-votes">
-                                Total Votes: <strong>{ward.totalVotes}</strong>
-                            </div>
-                        </div>
+            {/* Tab Navigation */}
+            <div className="tab-navigation">
+                <button
+                    className={`tab-button ${activeTab === 'results' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('results')}
+                >
+                    <span className="tab-icon">📊</span>
+                    <span>Results</span>
+                    <span className="tab-badge">{voterSessions.length} votes</span>
+                </button>
+                <button
+                    className={`tab-button ${activeTab === 'logs' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('logs')}
+                >
+                    <span className="tab-icon">📋</span>
+                    <span>Voter Logs</span>
+                    <span className="tab-badge">{voterSessions.length} voters</span>
+                </button>
+            </div>
 
-                        <table className="results-table">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>Candidate</th>
-                                    <th>Party</th>
-                                    <th>Symbol</th>
-                                    <th>Votes</th>
-                                    <th>%</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {ward.candidates.map((candidate, index) => {
-                                    const party = PARTIES[candidate.partyCode];
-                                    const percentage = ward.totalVotes > 0
-                                        ? ((candidate.votes / ward.totalVotes) * 100).toFixed(1)
-                                        : '0.0';
-                                    const isWinner = ward.winner?.candidateId === candidate.candidateId;
+            {/* Tab Content */}
+            <div className="tab-content">
+                <AnimatePresence mode="wait">
+                    {activeTab === 'results' && (
+                        <motion.div
+                            key="results"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            transition={{ duration: 0.3 }}
+                            className="results-container"
+                        >
+                            {results.map((ward) => (
+                                <motion.div
+                                    key={ward.wardNumber}
+                                    className="ward-results"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: ward.wardNumber * 0.1 }}
+                                >
+                                    <div className="ward-header">
+                                        <h2>Ward {ward.wardNumber}</h2>
+                                        <div className="total-votes">
+                                            Total Votes: <strong>{ward.totalVotes}</strong>
+                                        </div>
+                                    </div>
 
-                                    return (
-                                        <tr
-                                            key={candidate.candidateId}
-                                            className={isWinner ? 'winner-row' : ''}
-                                        >
-                                            <td className="rank-cell">
-                                                {isWinner && <span className="winner-badge">🏆</span>}
-                                                {index + 1}
-                                            </td>
-                                            <td className="candidate-cell">{candidate.candidateName}</td>
-                                            <td className="party-cell">
-                                                <span className="party-tag" style={{ borderColor: party.color }}>
-                                                    {party.name}
-                                                </span>
-                                            </td>
-                                            <td className="symbol-cell">{party.symbol}</td>
-                                            <td className="votes-cell">
-                                                <strong>{candidate.votes}</strong>
-                                            </td>
-                                            <td className="percentage-cell">
-                                                <div className="percentage-bar">
-                                                    <div
-                                                        className="percentage-fill"
-                                                        style={{
-                                                            width: `${percentage}%`,
-                                                            backgroundColor: party.color
-                                                        }}
-                                                    />
-                                                    <span className="percentage-text">{percentage}%</span>
+                                    <table className="results-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Rank</th>
+                                                <th>Candidate</th>
+                                                <th>Party</th>
+                                                <th>Symbol</th>
+                                                <th>Votes</th>
+                                                <th>%</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {ward.candidates.map((candidate, index) => {
+                                                const party = PARTIES[candidate.partyCode];
+                                                const percentage = ward.totalVotes > 0
+                                                    ? ((candidate.votes / ward.totalVotes) * 100).toFixed(1)
+                                                    : '0.0';
+                                                const isWinner = ward.winner?.candidateId === candidate.candidateId;
+
+                                                return (
+                                                    <tr
+                                                        key={candidate.candidateId}
+                                                        className={isWinner ? 'winner-row' : ''}
+                                                    >
+                                                        <td className="rank-cell">
+                                                            {isWinner && <span className="winner-badge">🏆</span>}
+                                                            {index + 1}
+                                                        </td>
+                                                        <td className="candidate-cell">{candidate.candidateName}</td>
+                                                        <td className="party-cell">
+                                                            <span className="party-tag" style={{ borderColor: party.color }}>
+                                                                {party.name}
+                                                            </span>
+                                                        </td>
+                                                        <td className="symbol-cell">{party.symbol}</td>
+                                                        <td className="votes-cell">
+                                                            <strong>{candidate.votes}</strong>
+                                                        </td>
+                                                        <td className="percentage-cell">
+                                                            <div className="percentage-bar">
+                                                                <div
+                                                                    className="percentage-fill"
+                                                                    style={{
+                                                                        width: `${percentage}%`,
+                                                                        backgroundColor: party.color
+                                                                    }}
+                                                                />
+                                                                <span className="percentage-text">{percentage}%</span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+
+                                    {ward.winner && (
+                                        <div className="winner-announcement">
+                                            <span className="winner-icon">🎉</span>
+                                            <strong>{ward.winner.candidateName}</strong> ({PARTIES[ward.winner.partyCode].name}) wins with {ward.winner.votes} votes
+                                        </div>
+                                    )}
+                                </motion.div>
+                            ))}
+
+                            {results.length === 0 && (
+                                <div className="no-results">
+                                    <span className="no-results-icon">📭</span>
+                                    <p>No votes recorded yet</p>
+                                </div>
+                            )}
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'logs' && (
+                        <motion.div
+                            key="logs"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3 }}
+                            className="logs-container"
+                        >
+                            {voterSessions.map((session, index) => (
+                                <motion.div
+                                    key={session.sessionId}
+                                    className="voter-log-card"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                >
+                                    <div className="log-header">
+                                        <div className="voter-info">
+                                            <span className="voter-number">Voter #{session.voterNumber}</span>
+                                            <span className="voter-time">{formatTime(session.completedAt || session.createdAt)}</span>
+                                        </div>
+                                        <div className="session-id">ID: {session.sessionId.slice(-8)}</div>
+                                    </div>
+
+                                    <div className="log-votes">
+                                        {[1, 2, 3, 4].map(ward => {
+                                            const candidateId = session.votes[ward];
+                                            if (!candidateId) return null;
+
+                                            const [, partyCode] = candidateId.split('_');
+                                            const party = PARTIES[partyCode];
+
+                                            return (
+                                                <div key={ward} className="vote-item">
+                                                    <span className="ward-label">Ward {ward}</span>
+                                                    <span className="vote-arrow">→</span>
+                                                    <span className="vote-choice">
+                                                        <span className="choice-symbol">{party.symbol}</span>
+                                                        <span className="choice-name">{getCandidateName(candidateId)}</span>
+                                                        <span className="choice-party" style={{ color: party.color }}>
+                                                            {party.name}
+                                                        </span>
+                                                    </span>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                                            );
+                                        })}
+                                    </div>
+                                </motion.div>
+                            ))}
 
-                        {ward.winner && (
-                            <div className="winner-announcement">
-                                <span className="winner-icon">🎉</span>
-                                <strong>{ward.winner.candidateName}</strong> ({PARTIES[ward.winner.partyCode].name}) wins with {ward.winner.votes} votes
-                            </div>
-                        )}
-                    </motion.div>
-                ))}
-
-                {results.length === 0 && (
-                    <div className="no-results">
-                        <span className="no-results-icon">📭</span>
-                        <p>No votes recorded yet</p>
-                    </div>
-                )}
+                            {voterSessions.length === 0 && (
+                                <div className="no-results">
+                                    <span className="no-results-icon">📋</span>
+                                    <p>No voter logs yet</p>
+                                </div>
+                            )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );

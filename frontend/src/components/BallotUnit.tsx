@@ -43,8 +43,8 @@ export const BallotUnit: React.FC<BallotUnitProps> = ({
             {/* Header */}
             <div className="ballot-header">
                 <div className="eci-badge">
-                    <div className="eci-emblem">🇮🇳</div>
-                    <div className="eci-text">Election Commission of India</div>
+                    <div className="eci-emblem">⚡</div>
+                    <div className="eci-text">Aryan's EVM</div>
                 </div>
             </div>
 
