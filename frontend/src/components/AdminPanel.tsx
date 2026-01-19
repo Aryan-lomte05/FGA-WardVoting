@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { PARTY_LIBRARY } from '../data/candidates';
 import { getAllVoterSessions, clearAllVotes } from '../lib/session';
 import type { VotingSession } from '../lib/session';
-import { loadElectionConfig, getDefaultConfig } from '../lib/electionConfig';
+import { loadElectionConfig, getDefaultConfig, clearElectionConfig } from '../lib/electionConfig';
 import type { ElectionConfig } from '../lib/electionConfig';
 import './AdminPanel.css';
 
@@ -211,9 +211,14 @@ export const AdminPanel: React.FC = () => {
                             <span>🔄</span>
                             <span>Reset Votes</span>
                         </button>
-                        <button onClick={() => navigate('/')} className="home-btn">
+                        <button onClick={() => {
+                            if (confirm('Go back to Election Setup? This will end the current election.')) {
+                                clearElectionConfig();
+                                navigate('/');
+                            }
+                        }} className="home-btn">
                             <span>🏠</span>
-                            <span>Home</span>
+                            <span>Setup</span>
                         </button>
                         <button onClick={() => setIsAuthenticated(false)} className="logout-button">
                             Logout
