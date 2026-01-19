@@ -1,0 +1,68 @@
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loader-content {
+    text-align: center;
+    color: white;
+    width: 300px;
+}
+
+.loader-logo {
+    font-size: 80px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px rgba(124, 58, 237, 0.5);
+}
+
+.loader-content h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0 0 30px 0;
+    background: linear-gradient(135deg, #A78BFA, #EC4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+}
+
+.loading-bar-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
+}
+
+.loading-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #7C3AED, #EC4899, #7C3AED);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+.loader-status {
+    font-size: 14px;
+    color: #64748B;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+}

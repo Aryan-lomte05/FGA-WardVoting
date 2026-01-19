@@ -98,6 +98,19 @@
     background: rgba(255, 255, 255, 0.08);
 }
 
+/* Featured Preset (Standard Project) */
+.preset-card.featured-preset {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+    border-color: #7C3AED !important;
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.2);
+    grid-column: 1 / -1;
+    /* Make it full width on specific breakpoints if desired, but here just highlight it */
+}
+
+.preset-card.featured-preset:hover {
+    box-shadow: 0 0 50px rgba(124, 58, 237, 0.4);
+}
+
 .preset-icon {
     font-size: 64px;
     margin-bottom: 16px;
@@ -124,23 +137,6 @@
     margin-bottom: 16px;
     font-size: 13px;
     color: #64748B;
-}
-
-.preset-parties {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-}
-
-.party-symbol {
-    font-size: 24px;
-}
-
-.party-more {
-    font-size: 14px;
-    color: #94A3B8;
 }
 
 .preset-select-btn {
