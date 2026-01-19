@@ -48,6 +48,10 @@ function VotingApp() {
     saveElectionConfig(config);
     setAppState('landing');
 
+    // Clear any existing session and initialize new one
+    clearSession();
+    localStorage.removeItem('voting_session'); // Force clear session storage
+
     // Initialize new session
     const newSession = initializeSession();
     setSession(newSession);
