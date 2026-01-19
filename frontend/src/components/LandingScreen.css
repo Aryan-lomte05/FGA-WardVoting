@@ -1,0 +1,204 @@
+/* Landing Screen Styling */
+
+.landing-screen {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 50%, #3B82F6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.landing-content {
+    max-width: 600px;
+    width: 100%;
+}
+
+/* ECI Logo Section */
+.eci-logo {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.emblem {
+    font-size: 80px;
+    line-height: 1;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.eci-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.eci-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: #DBEAFE;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Instructions Card */
+.instructions-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.instructions-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0 0 24px 0;
+    text-align: center;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #E5E7EB;
+}
+
+.instructions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.instructions-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.instruction-icon {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.instructions-list strong {
+    color: #1F2937;
+    font-weight: 600;
+}
+
+/* Begin Button */
+.begin-button {
+    width: 100%;
+    padding: 20px 32px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    border: none;
+    border-radius: 12px;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    transition: all 0.3s;
+    margin-bottom: 24px;
+}
+
+.begin-button:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
+}
+
+.button-text {
+    font-size: 18px;
+}
+
+.button-arrow {
+    font-size: 24px;
+    transition: transform 0.3s;
+}
+
+.begin-button:hover .button-arrow {
+    transform: translateX(4px);
+}
+
+/* Footer */
+.landing-footer {
+    text-align: center;
+}
+
+.seal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    color: #DBEAFE;
+    font-size: 13px;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+}
+
+.seal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 8px #10B981;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .emblem {
+        font-size: 60px;
+    }
+
+    .eci-title {
+        font-size: 22px;
+    }
+
+    .eci-subtitle {
+        font-size: 13px;
+    }
+
+    .instructions-card {
+        padding: 24px;
+    }
+
+    .instructions-title {
+        font-size: 18px;
+    }
+
+    .instructions-list li {
+        font-size: 14px;
+    }
+
+    .begin-button {
+        padding: 16px 24px;
+        font-size: 16px;
+    }
+}

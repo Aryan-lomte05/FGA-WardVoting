@@ -1,0 +1,278 @@
+/* Ballot Unit - Exact EVM Replica Styling */
+
+.ballot-unit {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background: #FFFFFF;
+  border: 2px solid #D1D5DB;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Header */
+.ballot-header {
+  background: linear-gradient(135deg, #F5F5F5 0%, #E5E5E5 100%);
+  padding: 16px 20px;
+  border-bottom: 3px solid #1E40AF;
+}
+
+.eci-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eci-emblem {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.eci-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1F2937;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Ward Title */
+.ward-title {
+  background: #1E40AF;
+  padding: 12px 20px;
+  text-align: center;
+}
+
+.ward-label {
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* Candidate List */
+.candidate-list {
+  background: #FFFFFF;
+  padding: 0;
+}
+
+.candidate-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 140px 100px;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #E5E7EB;
+  transition: background-color 0.2s;
+}
+
+.candidate-row:last-child {
+  border-bottom: none;
+}
+
+.candidate-row.selected {
+  background: #FEF3C7;
+}
+
+/* Serial Number */
+.serial-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: #374151;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Candidate Info */
+.candidate-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.candidate-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+/* Party Symbol */
+.party-symbol-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.party-symbol {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #000;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+}
+
+.symbol-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.party-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6B7280;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Vote Controls (LED + Button) */
+.vote-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* LED Indicator */
+.led-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #DC2626;
+  border: 2px solid #991B1B;
+  opacity: 0.2;
+  transition: all 0.3s ease;
+}
+
+.led-indicator.led-active {
+  opacity: 1;
+  background: #EF4444;
+  box-shadow: 0 0 15px #DC2626;
+}
+
+/* Vote Button */
+.vote-button {
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.2s;
+  box-shadow: 
+    0 4px 8px rgba(30, 64, 175, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.vote-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+  box-shadow: 
+    0 6px 12px rgba(30, 64, 175, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.vote-button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 
+    0 2px 4px rgba(30, 64, 175, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.vote-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-inner {
+  width: 100%;
+  height: 100%;
+  background: #3B82F6;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+/* Footer */
+.ballot-footer {
+  background: #F9FAFB;
+  padding: 12px 20px;
+  border-top: 1px solid #E5E7EB;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.seal-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+}
+
+.seal-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #059669;
+  letter-spacing: 1px;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .candidate-row {
+    grid-template-columns: 40px 1fr 100px 80px;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+
+  .serial-number {
+    font-size: 16px;
+  }
+
+  .candidate-name {
+    font-size: 14px;
+  }
+
+  .party-symbol {
+    width: 40px;
+    height: 40px;
+  }
+
+  .symbol-icon {
+    font-size: 22px;
+  }
+
+  .party-name {
+    font-size: 9px;
+  }
+
+  .vote-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .led-indicator {
+    width: 14px;
+    height: 14px;
+  }
+
+  .eci-text {
+    font-size: 11px;
+  }
+
+  .ward-label {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,337 @@
+/* Completion Screen Styling - Aryan's VoteHub Premium Edition */
+
+.completion-screen {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #059669 0%, #10B981 50%, #34D399 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.completion-screen::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-20px, -20px);
+    }
+}
+
+.completion-content {
+    max-width: 600px;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 48px 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Success Icon with Particles */
+.success-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 32px;
+    position: relative;
+}
+
+.success-particles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #10B981;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #10B981;
+}
+
+.checkmark {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* Messages */
+.completion-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0 0 16px 0;
+    background: linear-gradient(135deg, #059669, #10B981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.completion-message {
+    font-size: 16px;
+    color: #6B7280;
+    line-height: 1.6;
+    margin: 0 0 32px 0;
+}
+
+/* Session Info */
+.session-info {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.info-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+    border-radius: 24px;
+    border: 2px solid #10B981;
+}
+
+.badge-icon {
+    font-size: 18px;
+}
+
+.badge-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #047857;
+}
+
+/* Next Voter Section */
+.next-voter-section {
+    margin-top: 32px;
+}
+
+.divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+    margin-bottom: 24px;
+}
+
+.next-voter-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #059669;
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.action-button {
+    padding: 16px 24px;
+    border: none;
+    border-radius: 16px;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.action-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s;
+}
+
+.action-button:hover::before {
+    left: 100%;
+}
+
+.next-voter-btn {
+    background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.next-voter-btn:hover {
+    background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+    box-shadow: 0 12px 28px rgba(30, 64, 175, 0.4);
+    transform: translateY(-3px);
+}
+
+.election-over-btn {
+    background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.election-over-btn::after {
+    content: '✨';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.election-over-btn:hover {
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+    box-shadow: 0 12px 28px rgba(124, 58, 237, 0.4);
+    transform: translateY(-3px);
+}
+
+.action-button:active {
+    transform: translateY(-1px);
+}
+
+.button-icon {
+    font-size: 20px;
+}
+
+.admin-hint {
+    font-size: 12px;
+    color: #9CA3AF;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Footer - Aryan's VoteHub Branding */
+.completion-footer {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #E5E7EB;
+}
+
+.votehub-seal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.seal-icon {
+    font-size: 24px;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+.seal-text {
+    font-size: 16px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #7C3AED, #EC4899, #F59E0B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.seal-badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #F59E0B, #EC4899);
+    padding: 4px 12px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .completion-content {
+        padding: 32px 24px;
+        border-radius: 20px;
+    }
+
+    .success-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .completion-title {
+        font-size: 24px;
+    }
+
+    .completion-message {
+        font-size: 14px;
+    }
+
+    .session-info {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .info-badge {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .button-group {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .action-button {
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+
+    .seal-text {
+        font-size: 14px;
+    }
+}
