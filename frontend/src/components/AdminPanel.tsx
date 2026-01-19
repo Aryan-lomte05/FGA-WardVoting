@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { PARTIES } from '../data/candidates';
+import { PARTY_LIBRARY } from '../data/candidates';
 import { getAllVoterSessions, clearAllVotes } from '../lib/session';
 import type { VotingSession } from '../lib/session';
+import { loadElectionConfig, getDefaultConfig } from '../lib/electionConfig';
+import type { ElectionConfig } from '../lib/electionConfig';
 import './AdminPanel.css';
 
 const ADMIN_PASSCODE = '12345';
@@ -32,6 +34,13 @@ export const AdminPanel: React.FC = () => {
     const [activeTab, setActiveTab] = useState<TabType>('results');
     const [results, setResults] = useState<WardResults[]>([]);
     const [voterSessions, setVoterSessions] = useState<VotingSession[]>([]);
+    const [config, setConfig] = useState<ElectionConfig | null>(null);
+
+    useEffect(() => {
+        // Load config purely for display info, fallback to default if missing
+        const loadedConfig = loadElectionConfig() || getDefaultConfig();
+        setConfig(loadedConfig);
+    }, []);
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
@@ -47,6 +56,10 @@ export const AdminPanel: React.FC = () => {
     };
 
     const loadData = () => {
+        // Ensure we have the latest config logic
+        const currentConfig = loadElectionConfig() || getDefaultConfig();
+        setConfig(currentConfig);
+
         // Load voter sessions
         const sessions = getAllVoterSessions();
         setVoterSessions(sessions);
@@ -62,21 +75,26 @@ export const AdminPanel: React.FC = () => {
             }
         });
 
-        // Calculate results per ward
+        // Calculate results per ward based on CONFIG
         const wardResults: WardResults[] = [];
+        const numWards = currentConfig.wards;
+        const partyCodes = currentConfig.partyCodes;
 
-        for (let ward = 1; ward <= 4; ward++) {
+        for (let ward = 1; ward <= numWards; ward++) {
             const candidates: VoteCount[] = [];
             let totalVotes = 0;
 
-            Object.keys(PARTIES).forEach((partyCode, index) => {
+            partyCodes.forEach((partyCode, index) => {
                 const candidateId = `W${ward}_${partyCode}`;
                 const votes = allVotes[candidateId] || 0;
                 totalVotes += votes;
 
+                // Construct candidate name consistent with generation logic
+                const candidateName = `Candidate ${String.fromCharCode(65 + index)}${ward}`;
+
                 candidates.push({
                     candidateId,
-                    candidateName: `Candidate ${String.fromCharCode(65 + index)}${ward}`,
+                    candidateName,
                     partyCode,
                     votes
                 });
@@ -113,9 +131,15 @@ export const AdminPanel: React.FC = () => {
     };
 
     const getCandidateName = (candidateId: string) => {
-        const [ward, party] = candidateId.split('_');
+        if (!config) return candidateId;
+
+        const [ward, partyCode] = candidateId.split('_');
         const wardNum = ward.replace('W', '');
-        const partyIndex = Object.keys(PARTIES).indexOf(party);
+
+        // Find index in configured parties
+        const partyIndex = config.partyCodes.indexOf(partyCode);
+        if (partyIndex === -1) return candidateId; // Fallback if party not found in current config
+
         return `Candidate ${String.fromCharCode(65 + partyIndex)}${wardNum}`;
     };
 
@@ -179,13 +203,13 @@ export const AdminPanel: React.FC = () => {
                         <span className="header-icon">⚡</span>
                         <div>
                             <h1>Aryan's EVM Control Panel</h1>
-                            <p>Election Management Dashboard</p>
+                            <p>{config?.name || 'Election Management Dashboard'}</p>
                         </div>
                     </div>
                     <div className="header-actions">
                         <button onClick={handleNewElection} className="new-election-btn">
                             <span>🔄</span>
-                            <span>New Election</span>
+                            <span>Reset Votes</span>
                         </button>
                         <button onClick={() => navigate('/')} className="home-btn">
                             <span>🏠</span>
@@ -239,7 +263,7 @@ export const AdminPanel: React.FC = () => {
                                     transition={{ delay: ward.wardNumber * 0.1 }}
                                 >
                                     <div className="ward-header">
-                                        <h2>Ward {ward.wardNumber}</h2>
+                                        <h2>{config?.wardLabel || 'Ward'} {ward.wardNumber}</h2>
                                         <div className="total-votes">
                                             Total Votes: <strong>{ward.totalVotes}</strong>
                                         </div>
@@ -258,7 +282,7 @@ export const AdminPanel: React.FC = () => {
                                         </thead>
                                         <tbody>
                                             {ward.candidates.map((candidate, index) => {
-                                                const party = PARTIES[candidate.partyCode];
+                                                const party = PARTY_LIBRARY[candidate.partyCode] || PARTY_LIBRARY.PA; // Fallback
                                                 const percentage = ward.totalVotes > 0
                                                     ? ((candidate.votes / ward.totalVotes) * 100).toFixed(1)
                                                     : '0.0';
@@ -301,10 +325,10 @@ export const AdminPanel: React.FC = () => {
                                         </tbody>
                                     </table>
 
-                                    {ward.winner && (
+                                    {ward.winner && PARTY_LIBRARY[ward.winner.partyCode] && (
                                         <div className="winner-announcement">
                                             <span className="winner-icon">🎉</span>
-                                            <strong>{ward.winner.candidateName}</strong> ({PARTIES[ward.winner.partyCode].name}) wins with {ward.winner.votes} votes
+                                            <strong>{ward.winner.candidateName}</strong> ({PARTY_LIBRARY[ward.winner.partyCode].name}) wins with {ward.winner.votes} votes
                                         </div>
                                     )}
                                 </motion.div>
@@ -345,16 +369,17 @@ export const AdminPanel: React.FC = () => {
                                     </div>
 
                                     <div className="log-votes">
-                                        {[1, 2, 3, 4].map(ward => {
+                                        {/* Use configured number of wards for looping logs too */}
+                                        {Array.from({ length: config?.wards || 4 }, (_, i) => i + 1).map(ward => {
                                             const candidateId = session.votes[ward];
                                             if (!candidateId) return null;
 
                                             const [, partyCode] = candidateId.split('_');
-                                            const party = PARTIES[partyCode];
+                                            const party = PARTY_LIBRARY[partyCode] || PARTY_LIBRARY.PA;
 
                                             return (
                                                 <div key={ward} className="vote-item">
-                                                    <span className="ward-label">Ward {ward}</span>
+                                                    <span className="ward-label">{config?.wardLabel || 'Ward'} {ward}</span>
                                                     <span className="vote-arrow">→</span>
                                                     <span className="vote-choice">
                                                         <span className="choice-symbol">{party.symbol}</span>
