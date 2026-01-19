@@ -129,6 +129,7 @@ function VotingApp() {
               wardLabel={electionConfig.wardLabel}
             />
             <BallotUnit
+              key={currentWard}
               candidates={getCandidatesForCurrentWard()}
               wardNumber={currentWard}
               wardLabel={electionConfig.wardLabel}
@@ -161,6 +162,27 @@ function VotingApp() {
             <div className="already-voted-content">
               <h1>Already Voted</h1>
               <p>You have already cast your vote in this election.</p>
+              <button
+                className="reset-system-btn"
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to reset the entire system? This will clear all votes and configurations.')) {
+                    localStorage.clear();
+                    window.location.reload();
+                  }
+                }}
+                style={{
+                  marginTop: '20px',
+                  padding: '10px 20px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  color: '#94a3b8',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+              >
+                Reset System (Dev Only)
+              </button>
             </div>
           </motion.div>
         )}
