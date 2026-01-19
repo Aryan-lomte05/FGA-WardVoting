@@ -116,7 +116,7 @@ export const ElectionSetup: React.FC<ElectionSetupProps> = ({ onComplete }) => {
                         {presets.map((preset, index) => (
                             <motion.div
                                 key={preset.id}
-                                className={`preset-card ${preset.id === 'STANDARD_PROJECT' ? 'featured-preset' : ''}`}
+                                className="preset-card"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
