@@ -1,0 +1,305 @@
+/* Election Setup Styling - Premium Configuration UI */
+
+.election-setup {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    padding: 40px 20px;
+    overflow-y: auto;
+}
+
+.setup-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+.setup-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.setup-logo {
+    font-size: 64px;
+    margin-bottom: 16px;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.setup-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 8px 0;
+    background: linear-gradient(135deg, #7C3AED, #EC4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.setup-header p {
+    font-size: 16px;
+    color: #94A3B8;
+    margin: 0;
+}
+
+/* Tabs */
+.setup-tabs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+    justify-content: center;
+}
+
+.setup-tab {
+    padding: 12px 32px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.setup-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(124, 58, 237, 0.5);
+}
+
+.setup-tab.active {
+    background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+    border-color: transparent;
+    color: #FFFFFF;
+}
+
+/* Preset Grid */
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.preset-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 2px solid;
+    border-radius: 20px;
+    padding: 32px 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.preset-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(124, 58, 237, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.preset-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.preset-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 12px 0;
+}
+
+.preset-card p {
+    font-size: 14px;
+    color: #94A3B8;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+.preset-details {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #64748B;
+}
+
+.preset-parties {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.party-symbol {
+    font-size: 24px;
+}
+
+.party-more {
+    font-size: 14px;
+    color: #94A3B8;
+}
+
+.preset-select-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.preset-select-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Configuration */
+.custom-config {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 32px;
+}
+
+.config-section {
+    margin-bottom: 24px;
+}
+
+.config-section label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #E2E8F0;
+    margin-bottom: 8px;
+}
+
+.config-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 15px;
+    transition: all 0.3s;
+}
+
+.config-input:focus {
+    outline: none;
+    border-color: #7C3AED;
+    background: rgba(124, 58, 237, 0.1);
+}
+
+.config-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Party Selection */
+.party-category {
+    margin-bottom: 24px;
+}
+
+.party-category h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #94A3B8;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.party-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.party-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.party-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.05);
+}
+
+.party-card.selected {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: #7C3AED !important;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.party-card .party-symbol {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.party-card .party-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #E2E8F0;
+}
+
+.custom-submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+    border: none;
+    border-radius: 12px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 24px;
+}
+
+.custom-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(124, 58, 237, 0.4);
+}
+
+.custom-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .preset-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .config-row {
+        grid-template-columns: 1fr;
+    }
+
+    .party-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+
+    .setup-tabs {
+        flex-direction: column;
+    }
+
+    .setup-tab {
+        width: 100%;
+        justify-content: center;
+    }
+}

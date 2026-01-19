@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { PARTIES } from '../data/candidates';
-import type { Candidate } from '../data/candidates';
+import type { Candidate, Party } from '../data/candidates';
 import { playClickSound } from '../lib/audio';
 import './BallotUnit.css';
 
@@ -56,7 +56,7 @@ export const BallotUnit: React.FC<BallotUnitProps> = ({
             {/* Candidate List */}
             <div className="candidate-list">
                 {candidates.map((candidate) => {
-                    const party = PARTIES[candidate.partyCode];
+                    const party = parties[candidate.partyCode];
                     const isSelected = selectedCandidate === candidate.id;
 
                     return (

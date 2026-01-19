@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import './LandingScreen.css';
 
 interface LandingScreenProps {
-    onBeginVoting: () => void;
+    onBegin: () => void;
 }
 
-export const LandingScreen: React.FC<LandingScreenProps> = ({ onBeginVoting }) => {
+export const LandingScreen: React.FC<LandingScreenProps> = ({ onBegin }) => {
     return (
         <div className="landing-screen">
             <motion.div
@@ -52,7 +52,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onBeginVoting }) =
                 {/* Begin Button */}
                 <motion.button
                     className="begin-button"
-                    onClick={onBeginVoting}
+                    onClick={onBegin}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                 >
